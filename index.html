@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodGenesis — Tecnologia para Todos, Mesmo Sem Internet</title>
+  
+  <!-- CSS unificado -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#5850ec">
+  <link rel="apple-touch-icon" href="assets/imagens/logo.svg">
+</head>
+<body>
+  
+  <!-- O banner de status ONLINE/OFFLINE será injetado aqui pelo js/offline.js -->
+
+  <div class="app-container">
+    <header>
+      <div class="logo-container">
+        <span class="logo-icon">🌌</span>
+        <span class="logo-text">CodGenesis</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="hero-section">
+        <div class="hero-illustration">🚀</div>
+        <h1 class="hero-title">CodGenesis</h1>
+        <p class="hero-subtitle">"Tecnologia para Todos, Mesmo Sem Internet"</p>
+        
+        <div class="aula-actions" style="margin-top: 40px;" id="action-buttons">
+          <a href="cadastro.html" class="btn btn-primary" id="btn-comecar">Começar</a>
+          <a href="login.html" class="btn btn-secondary" id="btn-entrar">Entrar</a>
+        </div>
+        
+        <div id="already-logged" style="display: none; margin-top: 40px;">
+          <p style="margin-bottom: 16px; font-weight: 500;">Olá, <span id="welcome-user-name" style="font-weight: 700; color: var(--primary);">Estudante</span>! Você já está conectado.</p>
+          <a href="trilhas.html" class="btn btn-primary">Acessar Minhas Trilhas</a>
+          <button id="btn-logout-home" class="btn btn-secondary" style="margin-top: 12px;">Sair da Conta</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- CDNs e Dependências -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/offline.js"></script>
+
+  <script>
+    // Lógica específica para ajustar os botões se já estiver logado
+    document.addEventListener("DOMContentLoaded", () => {
+      const user = getCurrentUser();
+      const actionButtons = document.getElementById("action-buttons");
+      const alreadyLogged = document.getElementById("already-logged");
+      
+      if (user) {
+        actionButtons.style.display = "none";
+        alreadyLogged.style.display = "block";
+        document.getElementById("welcome-user-name").textContent = user.nome || user.email;
+        
+        const logoutHome = document.getElementById("btn-logout-home");
+        if (logoutHome) {
+          logoutHome.addEventListener("click", () => {
+            logout();
+          });
+        }
+      }
+    });
+
+    // Registro do Service Worker para suporte PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado com sucesso:', reg.scope))
+          .catch(err => console.error('Erro ao registrar Service Worker:', err));
+      });
+    }
+  </script>
+</body>
+</html>

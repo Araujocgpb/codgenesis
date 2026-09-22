@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Administração — CodGenesis</title><link rel="stylesheet" href="css/style.css"></head>
+<body><div class="app-container">
+  <header><div class="logo-container"><span class="logo-icon">🌌</span><span class="logo-text">CodGenesis</span></div><div class="header-user-info"><span id="user-name-display"></span> <a href="#" id="logout-btn">Sair</a></div></header>
+  <main>
+    <div class="mb-20"><span class="eyebrow">Administração</span><h2>Painel do proprietário</h2><p class="text-muted">Aprove usuários e mantenha as escolas cadastradas.</p></div>
+    <div id="admin-feedback" class="quiz-feedback" style="display:none"></div>
+    <section class="card mb-20"><div class="section-heading"><h3>Usuários pendentes</h3><button class="btn btn-outline" id="refresh-users">Atualizar</button></div><div id="users-list"><p class="text-muted">Carregando...</p></div></section>
+    <section class="card"><div class="section-heading"><h3>Escolas</h3></div><form id="school-form"><input class="form-input" id="school-name" placeholder="Nome da escola" required><button class="btn btn-primary mt-20">Adicionar escola</button></form><div id="schools-list" class="mt-20"></div></section>
+  </main>
+  <nav class="bottom-nav"><a href="owner.html" class="bottom-nav-item active"><span class="icon">🛡️</span><span>Admin</span></a><a href="perfil.html" class="bottom-nav-item"><span class="icon">👤</span><span>Perfil</span></a></nav>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/auth.js"></script><script src="js/offline.js"></script><script src="js/owner.js"></script>
+</body></html>

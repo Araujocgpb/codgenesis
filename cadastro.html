@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar — CodGenesis</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div class="app-container">
+    <header>
+      <div class="logo-container">
+        <span class="logo-icon">🌌</span>
+        <span class="logo-text">CodGenesis</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="mb-20">
+        <h2 style="font-family: var(--font-family-title); font-size: 1.75rem; font-weight: 800;">Crie sua Conta</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Comece sua jornada de aprendizado tecnológico hoje mesmo.</p>
+      </div>
+
+      <div id="feedback-msg" class="quiz-feedback" style="display: none; margin-bottom: 20px;"></div>
+
+      <form id="register-form" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label" for="reg-role">Tipo de conta *</label>
+          <select id="reg-role" class="form-input" required>
+            <option value="aluno">Aluno</option>
+            <option value="professor">Professor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Nome Completo *</label>
+          <input type="text" id="reg-name" class="form-input" placeholder="Seu nome completo" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">E-mail *</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="seuemail@exemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Senha *</label>
+          <input type="password" id="reg-password" class="form-input" placeholder="Mínimo 6 caracteres" minlength="6" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-school">Escola (opcional)</label>
+          <input type="text" id="reg-school" class="form-input" placeholder="Nome de sua escola pública ou privada">
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary mt-20">Criar conta</button>
+      </form>
+
+      <p class="text-center mt-20" style="font-size: 0.9rem; color: var(--text-muted);">
+        Já possui uma conta? <a href="login.html" class="text-link">Entrar</a>
+      </p>
+      
+      <p class="text-center mt-20">
+        <a href="index.html" class="text-link" style="font-size: 0.85rem; font-weight: 500;">← Voltar para o início</a>
+      </p>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/offline.js"></script>
+
+  <script>
+    async function handleRegister(e) {
+      e.preventDefault();
+      
+      const nome = document.getElementById("reg-name").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const password = document.getElementById("reg-password").value;
+      const escola = document.getElementById("reg-school").value.trim();
+      const papel = document.getElementById("reg-role").value;
+      const feedback = document.getElementById("feedback-msg");
+      const btn = document.getElementById("submit-btn");
+
+      feedback.style.display = "none";
+      btn.disabled = true;
+      btn.textContent = "Criando conta...";
+
+      try {
+        const result = await registerUser(nome, email, password, escola, papel);
+        
+        if (result.success) {
+          feedback.className = "quiz-feedback success";
+          feedback.textContent = result.mode === "offline" 
+            ? "Cadastro concluído offline! Redirecionando para a tela inicial..."
+            : "Conta criada com sucesso! Redirecionando...";
+          feedback.style.display = "block";
+          
+          setTimeout(() => {
+            // Mapeando fluxo exigido pelo MVP: redirecionar para a tela inicial
+            window.location.href = "index.html";
+          }, 1500);
+        }
+      } catch (err) {
+        feedback.className = "quiz-feedback error";
+        feedback.textContent = err.message || "Erro desconhecido ao cadastrar.";
+        feedback.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = "Criar conta";
+      }
+    }
+  </script>
+</body>
+</html>

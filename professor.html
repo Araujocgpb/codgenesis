@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Área do professor — CodGenesis</title><link rel="stylesheet" href="css/style.css"></head>
+<body><div class="app-container">
+<header><div class="logo-container"><span class="logo-icon">🌌</span><span class="logo-text">CodGenesis</span></div><div class="header-user-info"><span id="user-name-display"></span> <a href="#" id="logout-btn">Sair</a></div></header>
+<main><div class="mb-20"><span class="eyebrow">Área docente</span><h2>Conteúdo personalizado</h2><p class="text-muted">Crie aulas e tarefas extras para suas turmas.</p></div><div id="prof-feedback" class="quiz-feedback" style="display:none"></div>
+<section class="card mb-20"><h3>Nova aula</h3><form id="lesson-form"><input class="form-input mt-20" id="lesson-title" placeholder="Título" required><input class="form-input mt-20" id="lesson-track" placeholder="Trilha (ex.: programacao)" required><textarea class="form-input mt-20" id="lesson-content" rows="5" placeholder="Conteúdo da aula" required></textarea><button class="btn btn-primary mt-20">Publicar aula</button></form></section>
+<section class="card"><h3>Nova tarefa</h3><form id="task-form"><input class="form-input mt-20" id="task-text" placeholder="Descrição da tarefa" required><input class="form-input mt-20" id="task-track" placeholder="Trilha" required><button class="btn btn-primary mt-20">Publicar tarefa</button></form></section><div id="custom-list" class="mt-20"></div>
+</main><nav class="bottom-nav"><a href="professor.html" class="bottom-nav-item active"><span class="icon">✏️</span><span>Professor</span></a><a href="perfil.html" class="bottom-nav-item"><span class="icon">👤</span><span>Perfil</span></a></nav></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/auth.js"></script><script src="js/offline.js"></script><script src="js/professor.js"></script></body></html>

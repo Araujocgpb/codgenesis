@@ -1,0 +1,20 @@
+{
+  "name": "CodGenesis",
+  "short_name": "CodGenesis",
+  "description": "Plataforma de aprendizagem de programação e tecnologia offline.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "id": "./",
+  "background_color": "#f8fafc",
+  "theme_color": "#5850ec",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/imagens/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
