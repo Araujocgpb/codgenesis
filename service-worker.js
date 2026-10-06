@@ -1,6 +1,6 @@
 // Service Worker do CodGenesis - Armazenamento offline (PWA)
 
-const CACHE_NAME = "codgenesis-cache-v3";
+const CACHE_NAME = "codgenesis-cache-v4";
 
 // Recursos fundamentais que precisam ser cacheados para uso offline imediato
 const ASSETS_TO_CACHE = [

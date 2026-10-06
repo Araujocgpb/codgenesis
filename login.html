@@ -46,6 +46,7 @@
         </div>
 
         <button type="submit" id="submit-btn" class="btn btn-primary mt-20">Entrar</button>
+        <button type="button" id="forgot-password" class="text-link mt-20">Esqueci minha senha</button>
       </form>
 
       <p class="text-center mt-20" style="font-size: 0.9rem; color: var(--text-muted);">
@@ -100,6 +101,20 @@
         btn.textContent = "Entrar";
       }
     }
+
+    document.getElementById("forgot-password").addEventListener("click", async () => {
+      const email = document.getElementById("login-email").value.trim();
+      const feedback = document.getElementById("feedback-msg");
+      try {
+        await requestPasswordReset(email);
+        feedback.className = "quiz-feedback success";
+        feedback.textContent = "Enviamos um link para esse e-mail. Confira sua caixa de entrada.";
+      } catch (error) {
+        feedback.className = "quiz-feedback error";
+        feedback.textContent = error.message || "Não foi possível solicitar a troca de senha.";
+      }
+      feedback.style.display = "block";
+    });
   </script>
 </body>
 </html>

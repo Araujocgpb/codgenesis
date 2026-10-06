@@ -93,15 +93,21 @@
         
         if (result.success) {
           feedback.className = "quiz-feedback success";
-          feedback.textContent = result.mode === "offline" 
-            ? "Cadastro concluído offline! Redirecionando para a tela inicial..."
-            : "Conta criada com sucesso! Redirecionando...";
+          feedback.textContent = result.requiresConfirmation
+            ? "Conta criada. Confirme seu e-mail pelo link enviado para entrar."
+            : result.mode === "offline"
+              ? "Cadastro concluído offline! Redirecionando para a tela inicial..."
+              : "Conta criada com sucesso! Redirecionando...";
           feedback.style.display = "block";
           
-          setTimeout(() => {
-            // Mapeando fluxo exigido pelo MVP: redirecionar para a tela inicial
-            window.location.href = "index.html";
-          }, 1500);
+          if (result.requiresConfirmation) {
+            btn.disabled = true;
+            btn.textContent = "Confirme seu e-mail";
+          } else {
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 1500);
+          }
         }
       } catch (err) {
         feedback.className = "quiz-feedback error";

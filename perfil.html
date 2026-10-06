@@ -1,3 +1,63 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Meu perfil — CodGenesis</title><link rel="stylesheet" href="css/style.css"></head>
-<body><div class="app-container"><header><div class="logo-container"><span class="logo-icon">🌌</span><span class="logo-text">CodGenesis</span></div><a href="#" id="logout-btn">Sair</a></header><main><h2>Meu perfil</h2><p class="text-muted mb-20">Atualize seus dados de exibição.</p><div id="profile-feedback" class="quiz-feedback" style="display:none"></div><form id="profile-form"><label class="form-label" for="profile-name">Nome</label><input class="form-input" id="profile-name" required><label class="form-label mt-20" for="profile-school">Escola</label><input class="form-input" id="profile-school"><button class="btn btn-primary mt-20">Salvar perfil</button></form><hr class="mt-20"><h3 class="mt-20">Recuperar senha</h3><p class="text-muted">Enviaremos um link para o e-mail da sua conta.</p><button class="btn btn-outline mt-20" id="reset-password">Enviar link de recuperação</button></main><nav class="bottom-nav"><a href="trilhas.html" class="bottom-nav-item"><span class="icon">📚</span><span>Trilhas</span></a></nav></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/auth.js"></script><script src="js/offline.js"></script><script src="js/perfil.js"></script></body></html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu perfil — CodGenesis</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="logo-container">
+        <span class="logo-icon">🌌</span>
+        <span class="logo-text">CodGenesis</span>
+      </div>
+      <a href="#" id="logout-btn">Sair</a>
+    </header>
+
+    <main>
+      <h2>Meu perfil</h2>
+      <p class="text-muted mb-20">Atualize seus dados de exibição.</p>
+      <div id="profile-feedback" class="quiz-feedback" style="display:none"></div>
+
+      <form id="profile-form">
+        <label class="form-label" for="profile-name">Nome</label>
+        <input class="form-input" id="profile-name" required>
+        <label class="form-label mt-20" for="profile-school">Escola</label>
+        <input class="form-input" id="profile-school">
+        <p class="text-muted mt-20">Tipo de conta: <strong id="profile-role"></strong></p>
+        <button class="btn btn-primary mt-20">Salvar perfil</button>
+      </form>
+
+      <hr class="mt-20">
+      <h3 class="mt-20">Recuperar senha</h3>
+      <p class="text-muted">Enviaremos um link para o e-mail da sua conta.</p>
+      <button class="btn btn-outline mt-20" id="reset-password" type="button">Enviar link de recuperação</button>
+
+      <section id="password-update-section" class="mt-20">
+        <h3>Definir nova senha</h3>
+        <p class="text-muted">Use esta opção depois de abrir o link de recuperação recebido por e-mail.</p>
+        <form id="change-password-form">
+          <label class="form-label" for="new-password">Nova senha</label>
+          <input class="form-input" id="new-password" type="password" minlength="6" autocomplete="new-password" required>
+          <label class="form-label mt-20" for="confirm-password">Confirme a nova senha</label>
+          <input class="form-input" id="confirm-password" type="password" minlength="6" autocomplete="new-password" required>
+          <button class="btn btn-primary mt-20" type="submit">Salvar nova senha</button>
+        </form>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="trilhas.html" class="bottom-nav-item"><span class="icon">📚</span><span>Trilhas</span></a>
+    </nav>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/offline.js"></script>
+  <script src="js/perfil.js"></script>
+</body>
+</html>
