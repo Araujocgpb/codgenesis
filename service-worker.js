@@ -1,6 +1,6 @@
 // Service Worker do CodGenesis - Armazenamento offline (PWA)
 
-const CACHE_NAME = "codgenesis-cache-v4";
+const CACHE_NAME = "codgenesis-cache-v5";
 
 // Recursos fundamentais que precisam ser cacheados para uso offline imediato
 const ASSETS_TO_CACHE = [
@@ -32,20 +32,21 @@ const ASSETS_TO_CACHE = [
   "js/perfil.js",
   "js/comentarios.js",
   "manifest.json",
-  "assets/imagens/logo.svg",
-  // Cachear a biblioteca do Supabase importada via CDN para permitir carregamento offline
-  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  "assets/imagens/logo.svg"
 ];
 
 // Evento de instalação - Carrega os arquivos no cache
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Service Worker: Cacheando arquivos essenciais.");
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => {
-      return self.skipWaiting();
-    })
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.all(ASSETS_TO_CACHE.map(async (asset) => {
+        try {
+          await cache.add(asset);
+        } catch (error) {
+          console.error(`Service Worker: Não foi possível armazenar ${asset}:`, error);
+        }
+      })))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -70,35 +71,50 @@ self.addEventListener("activate", (event) => {
 // Evento de busca (fetch) - Estratégia Cache-First com fallback de rede
 // Isso assegura que se estiver offline, o app carregará instantaneamente do cache.
 self.addEventListener("fetch", (event) => {
-  // Ignorar requisições ao banco de dados do Supabase (essas devem falhar na rede se offline)
-  if (event.request.url.includes("supabase.co")) {
+  const requestUrl = new URL(event.request.url);
+
+  if (
+    event.request.method !== "GET" ||
+    requestUrl.origin !== self.location.origin ||
+    requestUrl.hostname.endsWith(".supabase.co")
+  ) {
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Retorna do cache se encontrar
-        return cachedResponse;
-      }
-      
-      // Caso contrário, busca na rede
-      return fetch(event.request).then((networkResponse) => {
-        // Se for uma requisição bem sucedida, podemos colocá-la no cache dinamicamente
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const networkResponse = await fetch(event.request);
+        if (networkResponse.ok && networkResponse.type === "basic") {
+          await cache.put(event.request, networkResponse.clone());
         }
         return networkResponse;
-      }).catch((err) => {
-        console.warn("Falha de rede ao buscar recurso:", event.request.url, err);
+      } catch (error) {
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) return cachedResponse;
+
         if (event.request.mode === "navigate") {
-          return caches.match("index.html");
+          const fallbackUrl = new URL(requestUrl.pathname, self.location.origin);
+          const routeFile = fallbackUrl.pathname.endsWith("/")
+            ? `${fallbackUrl.pathname}index.html`
+            : `${fallbackUrl.pathname}.html`;
+          const routeResponse = await cache.match(
+            new URL(routeFile, self.location.origin).href
+          );
+          if (routeResponse) return routeResponse;
+
+          const homeResponse = await cache.match(new URL("index.html", self.location.origin).href);
+          if (homeResponse) return homeResponse;
         }
-        throw err;
-      });
-    })
+
+        console.warn("Falha de rede; não há cópia em cache:", event.request.url, error);
+        return new Response("Você está offline e este conteúdo ainda não foi armazenado.", {
+          status: 503,
+          statusText: "Offline",
+          headers: { "Content-Type": "text/plain; charset=utf-8" }
+        });
+      }
+    })()
   );
 });
