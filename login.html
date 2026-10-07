@@ -26,6 +26,16 @@
 
       <form id="login-form" onsubmit="handleLogin(event)">
         <div class="form-group">
+          <label class="form-label" for="login-role">Entrar como</label>
+          <select id="login-role" class="form-input" required>
+            <option value="aluno">Aluno</option>
+            <option value="professor">Professor</option>
+            <option value="gestor_escola">Gestor escolar</option>
+            <option value="dono">Dono do app</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-label" for="login-email">E-mail</label>
           <input type="email" id="login-email" class="form-input" placeholder="seuemail@exemplo.com" required>
         </div>
@@ -59,6 +69,7 @@
     async function handleLogin(e) {
       e.preventDefault();
       
+      const papel = document.getElementById("login-role").value;
       const email = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value;
       const feedback = document.getElementById("feedback-msg");
@@ -69,13 +80,11 @@
       btn.textContent = "Carregando...";
 
       try {
-        const result = await loginUser(email, password);
+        const result = await loginUser(email, password, papel);
         
         if (result.success) {
           feedback.className = "quiz-feedback success";
-          feedback.textContent = result.mode === "offline-mock" 
-            ? "Modo de demonstração: Sessão offline inicializada!" 
-            : "Entrada realizada com sucesso! Redirecionando...";
+          feedback.textContent = "Entrada realizada com sucesso! Redirecionando...";
           feedback.style.display = "block";
           
           setTimeout(() => {
